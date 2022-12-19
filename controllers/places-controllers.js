@@ -1,3 +1,4 @@
+const {v4: uuidv4} = require('uuid')
 const HttpError = require("../models/http-error");
 
 const DUMMY_PLACES = [
@@ -31,10 +32,23 @@ exports.getPlaceByUserId = (req, res, next) => {
 
   const place = DUMMY_PLACES.find((p) => p.creator === userId);
   if (!place) {
-    return next(new HttpError(
-      "Could not find a place for the provided user id.",
-      404
-    ));
+    return next(
+      new HttpError("Could not find a place for the provided user id.", 404)
+    );
   }
   res.json({ place });
+};
+
+exports.createPlace = (req, res, next) => {
+  const { title, description, coordinates, address, creator } = req.body;
+  const createdPlace = {
+    id:uuidv4(),
+    title,
+    description,
+    location: coordinates,
+    address,
+    creator,
+  };
+  DUMMY_PLACES.push(createdPlace);
+  res.status(201).json({ place: createdPlace });
 };
