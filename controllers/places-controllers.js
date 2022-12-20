@@ -27,16 +27,16 @@ exports.getPlaceById = (req, res, next) => {
 
   res.json({ place });
 };
-exports.getPlaceByUserId = (req, res, next) => {
+exports.getPlacesByUserId = (req, res, next) => {
   const userId = req.params.uid;
 
-  const place = DUMMY_PLACES.find((p) => p.creator === userId);
-  if (!place) {
+  const places = DUMMY_PLACES.filter((p) => p.creator === userId);
+  if (!places || places.length === 0) {
     return next(
-      new HttpError("Could not find a place for the provided user id.", 404)
+      new HttpError("Could not find a places for the provided user id.", 404)
     );
   }
-  res.json({ place });
+  res.json({ places });
 };
 
 exports.createPlace = (req, res, next) => {
