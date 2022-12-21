@@ -11,11 +11,11 @@ const DUMMY_USERS = [
   },
 ];
 
-const getUsers = (req, res, next) => {
+exports. getUsers = (req, res, next) => {
   res.json({ users: DUMMY_USERS });
 };
 
-const signup = (req, res, next) => {
+exports.signup = (req, res, next) => {
   const { name, email, password } = req.body;
 
   const hasUser = DUMMY_USERS.find((u) => u.email === email);
@@ -35,7 +35,7 @@ const signup = (req, res, next) => {
   res.status(201).json({ user: createdUser });
 };
 
-const login = (req, res, next) => {
+exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   const identifiedUser = DUMMY_USERS.find((u) => u.email === email);
@@ -49,6 +49,3 @@ const login = (req, res, next) => {
   res.json({ message: "Logged in!" });
 };
 
-exports.getUsers = getUsers;
-exports.signup = signup;
-exports.login = login;
