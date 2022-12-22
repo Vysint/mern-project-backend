@@ -47,12 +47,19 @@ exports.getPlaceById = async (req, res, next) => {
 // function getPlaceById() { ... }
 // const getPlaceById = function() { ... }
 
-exports.getPlacesByUserId = (req, res, next) => {
+exports.getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
 
-  const places = DUMMY_PLACES.filter((p) => {
-    return p.creator === userId;
-  });
+  let places;
+  try {
+    places = await Place.find({ creator: userId });
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not find places by the provided user id.",
+      500
+    );
+    return next(error);
+  }
 
   if (!places || places.length === 0) {
     return next(
@@ -60,7 +67,9 @@ exports.getPlacesByUserId = (req, res, next) => {
     );
   }
 
-  res.json({ places });
+  res.json({
+    places: places.map((place) => place.toObject({ getters: true })),
+  });
 };
 
 exports.createPlace = async (req, res, next) => {
