@@ -27,7 +27,7 @@ app.use((error, req, res, next) => {
 });
 mongoose.set("strictQuery", false);
 mongoose
-  .connect("mongodb+srv://paige:0723055173@cluster0.pyr64xf.mongodb.net/places?retryWrites=true&w=majority")
+  .connect("mongodb+srv://paige:0723055173@cluster0.cluz7md.mongodb.net/?retryWrites=true&w=majority")
   .then(() => {
     app.listen(5001, () => console.log(`Listening at Port 5001`));
   })
