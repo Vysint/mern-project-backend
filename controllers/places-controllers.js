@@ -76,11 +76,10 @@ exports.createPlace = async (req, res, next) => {
     return next(error);
   }
 
-  // const title = req.body.title;
   const createdPlace = new Place({
     title,
     description,
-    // address,
+    address,
     location: coordinates,
     image:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/400px-Empire_State_Building_%28aerial_view%29.jpg",
