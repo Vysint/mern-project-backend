@@ -63,15 +63,26 @@ exports.signup = async (req, res, next) => {
   res.status(201).json({ user: createdUser.toObject({ getters: true }) });
 };
 
-exports.login = (req, res, next) => {
+exports.login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  const identifiedUser = DUMMY_USERS.find((u) => u.email === email);
+  let identifiedUser;
+  try {
+    identifiedUser = await User.findOne({ email: email });
+  } catch (err) {
+    const error = new HttpError(
+      "Logging in user failed, try again later.",
+      400
+    );
+    return next(error);
+  }
+
   if (!identifiedUser || identifiedUser.password !== password) {
-    throw new HttpError(
-      "Could not identify user, credentials seem to be wrong.",
+    const error = new HttpError(
+      "Invalid credentials, could not log you in.",
       401
     );
+    return next(error);
   }
 
   res.json({ message: "Logged in!" });
