@@ -10,8 +10,20 @@ const app = express();
 
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  next();
+});
+
 app.use("/api/places", placesRoutes); // => /api/places...
 app.use("/api/users", usersRoutes);
+
+
 
 app.use((req, res, next) => {
   const error = new HttpError("Could not find this route.", 404);
@@ -27,7 +39,9 @@ app.use((error, req, res, next) => {
 });
 mongoose.set("strictQuery", false);
 mongoose
-  .connect("mongodb+srv://paige:0723055173@cluster0.cluz7md.mongodb.net/mern?retryWrites=true&w=majority")
+  .connect(
+    "mongodb+srv://paige:0723055173@cluster0.cluz7md.mongodb.net/mern?retryWrites=true&w=majority"
+  )
   .then(() => {
     app.listen(5001, () => console.log(`Listening at Port 5001`));
   })
