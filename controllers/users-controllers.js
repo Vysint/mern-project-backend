@@ -4,17 +4,20 @@ const { validationResult } = require("express-validator");
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
 
-const DUMMY_USERS = [
-  {
-    id: "u1",
-    name: "Max Schwarz",
-    email: "test@test.com",
-    password: "testers",
-  },
-];
-
-exports.getUsers = (req, res, next) => {
-  res.json({ users: DUMMY_USERS });
+exports.getUsers = async (req, res, next) => {
+  let users;
+  try {
+    users = await User.find({}, "-password");
+  } catch (err) {
+    const error = new HttpError(
+      "Fetching users failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+  res.json({
+    users: users.map((user) => user.toObject({ getters: true })),
+  });
 };
 
 exports.signup = async (req, res, next) => {
@@ -48,7 +51,7 @@ exports.signup = async (req, res, next) => {
     name,
     email,
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Chris_Brown_5%2C_2012.jpg/440px-Chris_Brown_5%2C_2012.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/President_Barack_Obama.jpg/440px-President_Barack_Obama.jpg",
     password,
     places,
   });
