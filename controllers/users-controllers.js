@@ -27,7 +27,7 @@ exports.signup = async (req, res, next) => {
       new HttpError("Invalid inputs passed, please check your data.", 422)
     );
   }
-  const { name, email, password, places } = req.body;
+  const { name, email, password } = req.body;
 
   let existingUser;
   try {
@@ -53,7 +53,7 @@ exports.signup = async (req, res, next) => {
     image:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/President_Barack_Obama.jpg/440px-President_Barack_Obama.jpg",
     password,
-    places,
+    places:[]
   });
 
   try {
