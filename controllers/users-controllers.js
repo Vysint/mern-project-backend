@@ -52,7 +52,7 @@ exports.signup = async (req, res, next) => {
     image:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/President_Barack_Obama.jpg/440px-President_Barack_Obama.jpg",
     password,
-    places:[]
+    places: [],
   });
 
   try {
@@ -87,5 +87,8 @@ exports.login = async (req, res, next) => {
     return next(error);
   }
 
-  res.json({ message: "Logged in!" });
+  res.json({
+    message: "Logged in!",
+    user: identifiedUser.toObject({ getters: true }),
+  });
 };
