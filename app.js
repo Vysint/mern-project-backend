@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -23,14 +25,17 @@ app.use((req, res, next) => {
 app.use("/api/places", placesRoutes); // => /api/places...
 app.use("/api/users", usersRoutes);
 
-
-
 app.use((req, res, next) => {
   const error = new HttpError("Could not find this route.", 404);
   throw error;
 });
 
 app.use((error, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, (err) => {
+      console.log(err);
+    });
+  }
   if (res.headerSent) {
     return next(error);
   }
