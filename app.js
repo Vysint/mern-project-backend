@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -12,6 +13,8 @@ const app = express();
 
 app.use(bodyParser.json());
 
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -19,10 +22,11 @@ app.use((req, res, next) => {
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+
   next();
 });
 
-app.use("/api/places", placesRoutes); // => /api/places...
+app.use("/api/places", placesRoutes);
 app.use("/api/users", usersRoutes);
 
 app.use((req, res, next) => {
@@ -42,13 +46,13 @@ app.use((error, req, res, next) => {
   res.status(error.code || 500);
   res.json({ message: error.message || "An unknown error occurred!" });
 });
-mongoose.set("strictQuery", false);
+mongoose.set("strictQuery", true);
 mongoose
   .connect(
-    "mongodb+srv://paige:0723055173@cluster0.cluz7md.mongodb.net/mern?retryWrites=true&w=majority"
+    `mongodb+srv://paige:0723055173@cluster0.cluz7md.mongodb.net/mern?retryWrites=true&w=majority`
   )
   .then(() => {
-    app.listen(5001, () => console.log(`Listening at Port 5001`));
+    app.listen(5001, () => console.log("Listening at PORT 5001"));
   })
   .catch((err) => {
     console.log(err);
