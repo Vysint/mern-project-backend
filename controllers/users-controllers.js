@@ -75,7 +75,7 @@ exports.signup = async (req, res, next) => {
   try {
     token = jwt.sign(
       { userId: createdUser.id, email: createdUser.email },
-      "supersecret_do not share",
+      process.env.JWT_KEY,
       { expiresIn: "1h" }
     );
   } catch (err) {
@@ -134,7 +134,7 @@ exports.login = async (req, res, next) => {
   try {
     token = jwt.sign(
       { userId: identifiedUser.id, email: identifiedUser.email },
-      "supersecret_do not share",
+      process.env.JWT_KEY,
       { expiresIn: "1h" }
     );
   } catch (err) {
